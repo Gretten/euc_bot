@@ -8,7 +8,7 @@ const bot = new Telegraf(process.env.BOT_TOKEN);
 
 sqlite.connect('database/base.db');
 
-
+sqlite.run(`SELECT * FROM euc_marks`, (res) => return typeof res);
 
 /* command functions */
 
