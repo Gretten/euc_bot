@@ -9,4 +9,8 @@ const getWheels = () => {
 
 	});
 }
-getWheels();
+// getWheels();
+
+sqlite.run(`SELECT * FROM euc_models WHERE MK_ID = 5`, (res) => console.log(res))
+
+sqlite.run(`SELECT * FROM euc_models WHERE MK_ID = (SELECT ID FROM euc_marks WHERE MARK = ${ctx.message})`, (res) => console.log(res))

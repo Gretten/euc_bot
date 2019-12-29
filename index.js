@@ -34,7 +34,19 @@ bot.command('garage', (ctx) => {
   ))
 })
 
-bot.hears(getWheelModels('str'), (ctx) => ctx.reply('Слышу тебя ясно и четко!'));
+bot.hears(getWheelModels('str'), (ctx) => {
+    let markId = 0;
+    //console.log(ctx.message.text);
+    //sqlite.run(`SELECT * FROM euc_marks WHERE MARK = "${ctx.message.text}"`, (res) => console.log(res[0].ID));
+   
+    sqlite.run(`SELECT ID FROM euc_marks WHERE MARK = "${ctx.message.text}"`, (res) => markId = res[0].ID);	
+    console.log(markId);
+    sqlite.run(`SELECT * FROM euc_models WHERE MK_ID = ${markId}`, (res) => {
+        console.log(res)
+    })
+    
+
+});
 
 /* api connection */
 
