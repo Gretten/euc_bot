@@ -4,10 +4,12 @@ const Telegraf = require('telegraf');
 const Extra = require('telegraf/extra')
 const Markup = require('telegraf/markup')
 const sqlite = require('sqlite-sync');
+const commandParts = require('telegraf-command-parts');
+
 require('dotenv').config();
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
-
+bot.use(commandParts());
 sqlite.connect('database/base.db');
 
 /* command functions */
@@ -63,10 +65,10 @@ bot.hears(/(Gotway|Inmotion|Kingsong|Ninebot|Airwheel|Rockwheel)/gi, (ctx) => {
 });
 
 bot.command('user', (ctx) => {
-    return console.log(ctx.from);
+    return console.log(res);
 })
 
-bot.command('show', (ctx) => {
+bot.command('my', (ctx) => {
     const user = ctx.from.username;
     const id = ctx.from.id;
     let userModels = '';
@@ -80,6 +82,43 @@ bot.command('show', (ctx) => {
     })
     return ctx.reply(`Мои модели:\n${userModels}`);
 })
+
+bot.command('show', (ctx) => {
+    const user = ctx.state.command.args;
+    const id = ctx.from.id;
+    let userModels = '';
+    sqlite.run(`SELECT MODEL FROM users WHERE NICK = "${user}"`, (res) => {
+	console.log(res[0]);
+        if(res[0]) {
+            let i = res.length-1;
+            do {
+                userModels += res[i].MODEL + '⚡️' + '\n';
+                i--;
+            } while (i >= 0);
+            return ctx.reply(`Модели ${user}:\n${userModels}`);
+        } else return ctx.reply('Ничего нет!');
+    })
+})
+
+
+
 /* api connection */
+
+// Задачи:
+// 1. Вывод всех логинов в базе и привязанных к ним колес.
+// 2. Вывод конкретного логина по нику. 
+
+/* 
+Схема вывода всех логинов и колес:
+- Делается запрос - например, /all.
+- Отрабатывает SQL-запрос, выводящий таблицу всех юзеров с колесами.
+- Некая функция приводит полученный объект к удобному виду: логин повторяется только один раз.
+- Результат выводится по аналогии с командой /show.
+*/
+
+bot.command('all', (ctx) => {
+    console.log(ctx.state.command);
+});
+
 
 bot.launch();
