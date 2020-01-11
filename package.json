@@ -16,5 +16,11 @@
   "bugs": {
     "url": "https://github.com/Gretten/euc_bot/issues"
   },
-  "homepage": "https://github.com/Gretten/euc_bot#readme"
+  "homepage": "https://github.com/Gretten/euc_bot#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "sqlite-sync": "^0.3.9",
+    "telegraf": "^3.35.0",
+    "telegraf-command-parts": "^1.0.3"
+  }
 }
